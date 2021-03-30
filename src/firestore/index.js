@@ -54,8 +54,8 @@ messaging
   });
 
 messaging.onMessage((payload) => {
-  //payload = {from, priority, notification, collapse_key}
-  //payload.notification = {title, body, icon}
+  // payload = { from, priority, notification, collapse_key };
+  // payload.notification = { title, body, icon };
   messagePayload = { ...payload.notification };
 });
 

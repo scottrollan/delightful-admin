@@ -1,33 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Toast, Button, Form } from 'react-bootstrap';
+import { createRandomString } from '../functions/CreateRandomString';
+import $ from 'jquery';
+import styles from './ChatPopup.module.scss';
 
-export default function ChatPopup({ show, toggleShow, name, email, str }) {
+export default function ChatPopup({ str, chat }) {
+  const [show, setShow] = useState(true);
+  const [chatObj, setChatObj] = useState({});
   const [message, setMessage] = useState('');
+  const [conversation, setConversation] = useState([]);
 
+  const closeChat = () => {
+    setShow(!setShow);
+  };
+
+  useEffect(() => {
+    setChatObj({ ...chat });
+    const q = chat.conversation;
+    setConversation([...q]);
+    $(`#toastBody${str}`).animate(
+      {
+        scrollTop: $(`#bottomOfChat${str}`).offset().top,
+      },
+      500
+    );
+  }, [chat]);
   return (
     <>
-      <Toast show={show} onClose={toggleShow} style={styles.toast}>
-        <Toast.Header style={styles.toastHeader}>
-          <strong>{name}</strong>
-          <small>{email}</small>
+      <Toast show={show} onClose={closeChat} className={styles.toast}>
+        <Toast.Header className={styles.toastHeader}>
+          <strong>{chatObj.userName}</strong>
+          <small>{chatObj.userEmail}</small>
         </Toast.Header>
-        <Toast.Body style={styles.toastBody}>
-          <div style={{ display: 'flex' }}>
-            <div style={styles.userIcon}>user</div>
-            <div
-              style={styles.userQuote}
-            >{`This is where the chat will take place for chat id: "${str}" Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`}</div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
-            <div style={styles.adminIcon}>DD</div>
-            <div style={styles.adminQuote}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. At
-              urna condimentum mattis pellentesque id nibh tortor id aliquet.
-            </div>
-          </div>
+        <Toast.Body id={`toastBody${str}`} className={styles.toastBody}>
+          {conversation.map((c) => {
+            return (
+              <div
+                key={createRandomString(12)}
+                style={{
+                  display: 'flex',
+                  flexDirection: c.fromUser ? 'row' : 'row-reverse',
+                }}
+              >
+                <div
+                  className={c.fromUser ? styles.userIcon : styles.adminIcon}
+                >
+                  {c.fromUser ? 'user' : 'DD'}
+                </div>
+                <div
+                  className={c.fromUser ? styles.userQuote : styles.adminQuote}
+                >
+                  {c.quote}
+                </div>
+              </div>
+            );
+          })}
+
+          <div id={`bottomOfChat${str}`}></div>
         </Toast.Body>
-        <Form id={`form${str}`} style={styles.form}>
+        <Form id={`form${str}`} className={styles.form}>
           <Form.Group controlId="messageInput">
             <Form.Label srOnly="Enter your message here"></Form.Label>
             <Form.Control
@@ -37,7 +68,7 @@ export default function ChatPopup({ show, toggleShow, name, email, str }) {
               placeholder="Enter your message"
               required
               onChange={(e) => setMessage(e.target.value)}
-              style={styles.messageInput}
+              className={styles.messageInput}
             ></Form.Control>
           </Form.Group>
         </Form>
@@ -45,75 +76,3 @@ export default function ChatPopup({ show, toggleShow, name, email, str }) {
     </>
   );
 }
-
-const iconStyles = {
-  borderRadius: '50%',
-  width: '8vmin',
-  height: '8vmin',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const styles = {
-  toast: {
-    position: 'relative',
-    maxHeight: '80vh',
-  },
-  toastHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  toastBody: {
-    maxHeight: '60vh',
-    overflow: 'scroll',
-    display: 'flex',
-    flexDirection: 'column',
-    paddingBottom: '3rem',
-  },
-  userIcon: {
-    ...iconStyles,
-    backgroundColor: 'var(--admin-black)',
-    color: 'var(--admin-white)',
-  },
-  userQuote: {
-    alignSelf: 'flex-start',
-    textAlign: 'left',
-    maxWidth: '75%',
-    backgroundColor: 'var(--admin-black)',
-    color: 'var(--admin-white)',
-    padding: '0.25rem 0.375rem',
-    borderRadius: '0 0.85rem 0.85rem 0.85rem',
-    margin: '0.95rem 0.25rem 0.5rem',
-  },
-  adminIcon: {
-    ...iconStyles,
-    backgroundColor: 'var(--admin-white)',
-    color: 'var(--admin-black)',
-  },
-  adminQuote: {
-    alignSelf: 'flex-end',
-    textAlign: 'right',
-    maxWidth: '75%',
-    backgroundColor: 'var(--admin-white)',
-    color: 'var(--admin-black)',
-    padding: '0.25rem 0.375rem',
-    borderRadius: '0.85rem 0 0.85rem 0.85rem',
-    margin: '0.95rem 0.25rem 0.5rem',
-  },
-  form: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  messageInput: {
-    height: '100%',
-    border: 'none',
-    padding: '5px',
-    minWidth: '0',
-    boxShadow: 'none',
-    maxHeight: '20vh',
-    resize: 'none',
-  },
-};

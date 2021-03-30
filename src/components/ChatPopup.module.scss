@@ -1,0 +1,79 @@
+@import '../styles/custom-properties.scss';
+
+:root {
+  --top-bottom-space: 5vmin;
+}
+
+@mixin iconStyles {
+  border-radius: 50%;
+  min-width: 5vmin;
+  min-height: 5vmin;
+  max-width: 5vmin;
+  max-height: 5vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toast {
+  position: relative;
+  max-height: calc(40vh + var(--top-bottom-space) + var(--top-bottom-space));
+  margin: 2vmin;
+}
+.toastHeader {
+  display: flex;
+  justify-content: space-between;
+  height: var(--top-bottom-space);
+}
+.toastBody {
+  max-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(40vh - var(--top-bottom-space));
+  margin-bottom: var(--top-bottom-space);
+  overflow-y: scroll;
+}
+.userIcon {
+  @include iconStyles;
+  background-color: var(--admin-black);
+  color: var(--admin-white);
+}
+.userQuote {
+  align-self: flex-start;
+  text-align: left;
+  background-color: var(--admin-black);
+  color: var(--admin-white);
+  padding: 0.25rem 0.375rem;
+  border-radius: 0 0.85rem 0.85rem 0.85rem;
+  margin: 0.95rem 0.25rem 0.5rem;
+}
+.adminIcon {
+  @include iconStyles;
+  background-color: var(--admin-white);
+  color: var(--admin-black);
+}
+.adminQuote {
+  align-self: flex-end;
+  text-align: right;
+  background-color: var(--admin-white);
+  color: var(--admin-black);
+  padding: 0.25rem 0.375rem;
+  border-radius: 0.85rem 0 0.85rem 0.85rem;
+  margin: 0.95rem 0.25rem 0.5rem;
+}
+.form {
+  height: var(--top-bottom-space);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.messageInput {
+  height: 100%;
+  border: none;
+  padding: 5px;
+  min-width: 0;
+  box-shadow: none;
+  max-height: 20vh;
+  resize: none;
+}
