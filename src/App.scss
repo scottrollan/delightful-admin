@@ -1,5 +1,9 @@
 @import './styles/custom-properties.scss';
 
+:root {
+  --logo-size: ;
+}
+
 .App {
   background-color: var(--admin-black);
   min-height: 100vh;
@@ -11,6 +15,9 @@
   font-size: calc(10px + 2vmin);
   color: white;
   text-align: center;
+  @media screen and (max-width: 768px) {
+    padding: 4vmin 6vmin;
+  }
 }
 
 .App-logo {

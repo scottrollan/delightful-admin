@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ChatForm from './ChatForm';
 import { Toast, Button, Form } from 'react-bootstrap';
 import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
@@ -7,7 +8,6 @@ import styles from './ChatPopup.module.scss';
 export default function ChatPopup({ str, chat }) {
   const [show, setShow] = useState(true);
   const [chatObj, setChatObj] = useState({});
-  const [message, setMessage] = useState('');
   const [conversation, setConversation] = useState([]);
 
   const closeChat = () => {
@@ -16,6 +16,7 @@ export default function ChatPopup({ str, chat }) {
 
   useEffect(() => {
     setChatObj({ ...chat });
+    console.log(chat);
     const q = chat.conversation;
     setConversation([...q]);
     $(`#toastBody${str}`).animate(
@@ -56,22 +57,9 @@ export default function ChatPopup({ str, chat }) {
             );
           })}
 
-          <div id={`bottomOfChat${str}`}></div>
+          <div id={`bottomOfChat${str}`} style={{ minHeight: '10px' }}></div>
         </Toast.Body>
-        <Form id={`form${str}`} className={styles.form}>
-          <Form.Group controlId="messageInput">
-            <Form.Label srOnly="Enter your message here"></Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={1}
-              value={message}
-              placeholder="Enter your message"
-              required
-              onChange={(e) => setMessage(e.target.value)}
-              className={styles.messageInput}
-            ></Form.Control>
-          </Form.Group>
-        </Form>
+        <ChatForm formStr={`form${str}`} chatID={chat.id} />
       </Toast>
     </>
   );
