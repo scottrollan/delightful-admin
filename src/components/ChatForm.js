@@ -14,19 +14,28 @@ export default function ChatForm({ formStr, chatID }) {
     event.preventDefault();
     const newDate = new Date();
     const newStamp = timeStamp.fromDate(newDate);
-    helpChatsCollection.doc(chatID).update({
-      conversation: fsArrayUnion({
-        fromUser: false,
-        quote: newMessage,
-        timestamp: newStamp,
-      }),
-    });
+    try {
+      helpChatsCollection.doc(chatID).update({
+        conversation: fsArrayUnion({
+          fromUser: false,
+          quote: newMessage,
+          timestamp: newStamp,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setNewMessage('');
+    }
   };
 
   return (
     <Form id={formStr} style={styles.form} onSubmit={(e) => submitNow(e)}>
       <div style={styles.inputArea}>
-        <Form.Group controlId="messageInput" style={styles.textareaContainer}>
+        <Form.Group
+          controlId={`${formStr}messageInput`}
+          style={styles.textareaContainer}
+        >
           <Form.Label srOnly="Enter your message here"></Form.Label>
           <Form.Control
             as="textarea"
@@ -61,6 +70,7 @@ const styles = {
     backgroundColor: 'var(--admin-white)',
     display: 'flex',
     justifyContent: 'space-between',
+    padding: '0.4vmin 0 0.4vmin 1vmin',
   },
   textareaContainer: {
     flexGrow: 1,

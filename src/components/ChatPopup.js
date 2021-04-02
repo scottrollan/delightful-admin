@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ChatForm from './ChatForm';
-import { Toast, Button, Form } from 'react-bootstrap';
+import EndChatButton from './EndChatButton';
+import { Toast } from 'react-bootstrap';
 import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
 import styles from './ChatPopup.module.scss';
@@ -15,17 +16,23 @@ export default function ChatPopup({ str, chat }) {
   };
 
   useEffect(() => {
+    if ($(`#toastBodyContent${str}`).length > 0) {
+      //get height of content inside toastBody...
+      const contentDiv = $(`#toastBodyContent${str}`);
+      let contentHeight = contentDiv[0].scrollHeight;
+      //scroll toastBody... that distance (happens when new comment added)
+      $(`#toastBody${str}`).animate(
+        {
+          scrollTop: contentHeight,
+        },
+        800
+      );
+    }
     setChatObj({ ...chat });
-    console.log(chat);
     const q = chat.conversation;
     setConversation([...q]);
-    $(`#toastBody${str}`).animate(
-      {
-        scrollTop: $(`#bottomOfChat${str}`).offset().top,
-      },
-      500
-    );
   }, [chat]);
+
   return (
     <>
       <Toast show={show} onClose={closeChat} className={styles.toast}>
@@ -34,30 +41,39 @@ export default function ChatPopup({ str, chat }) {
           <small>{chatObj.userEmail}</small>
         </Toast.Header>
         <Toast.Body id={`toastBody${str}`} className={styles.toastBody}>
-          {conversation.map((c) => {
-            return (
-              <div
-                key={createRandomString(12)}
-                style={{
-                  display: 'flex',
-                  flexDirection: c.fromUser ? 'row' : 'row-reverse',
-                }}
-              >
+          <div id={`toastBodyContent${str}`}>
+            {conversation.map((c) => {
+              return (
                 <div
-                  className={c.fromUser ? styles.userIcon : styles.adminIcon}
+                  key={createRandomString(12)}
+                  style={{
+                    display: 'flex',
+                    flexDirection: c.fromUser ? 'row' : 'row-reverse',
+                  }}
                 >
-                  {c.fromUser ? 'user' : 'DD'}
+                  <div
+                    className={c.fromUser ? styles.userIcon : styles.adminIcon}
+                  >
+                    {c.fromUser ? chatObj.userName.substr(0, 1) : 'DD'}
+                  </div>
+                  <div
+                    className={
+                      c.fromUser ? styles.userQuote : styles.adminQuote
+                    }
+                  >
+                    {c.quote}
+                  </div>
                 </div>
-                <div
-                  className={c.fromUser ? styles.userQuote : styles.adminQuote}
-                >
-                  {c.quote}
-                </div>
-              </div>
-            );
-          })}
-
-          <div id={`bottomOfChat${str}`} style={{ minHeight: '10px' }}></div>
+              );
+            })}
+            <div
+              style={{
+                marginBottom: '3vmin',
+              }}
+            >
+              <EndChatButton str={str} chatObj={chatObj} />
+            </div>
+          </div>
         </Toast.Body>
         <ChatForm formStr={`form${str}`} chatID={chat.id} />
       </Toast>
