@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { helpChatsCollection } from '../firestore/index';
+import firebase, { helpChatsCollection } from '../firestore/index';
 
 export default function EndChatButton({ str, chatObj }) {
   const [show, setShow] = useState(false);
 
-  const sendEmail = () => {
+  const sendEmail = async () => {
     const user = chatObj.userName;
     const userEmail = chatObj.userEmail;
     let conversation = [];
@@ -13,15 +13,26 @@ export default function EndChatButton({ str, chatObj }) {
     const chatStartTime = convArray[0].timestamp;
     const convLength = convArray.length;
     const chatEndTime = convArray[convLength - 1].timestamp;
-    const header = `Chat initiated: ${chatStartTime.toDate()} // by: ${user} //with a provided email of: ${userEmail} // Chat ended: ${chatEndTime.toDate()}: `;
+    const header = `Chat initiated: ${chatStartTime.toDate()}by: ${user} with a provided email of: ${userEmail}Chat ended: ${chatEndTime.toDate()}`;
     convArray.forEach((c) => {
       if (c.fromUser) {
-        conversation = [...conversation, `<p>${user} said: ${c.quote}</p><br>`];
+        conversation = [...conversation, `${user} said: ${c.quote}`];
       } else {
-        conversation = [...conversation, `<p>DD said: ${c.quote}</p><br>`];
+        conversation = [...conversation, `DD said: ${c.quote}`];
       }
     });
-    console.log(`${header}${conversation}`);
+    const emailContent = `${header}${conversation}`;
+    //cloud function to send email data
+    const sendTranscripts = firebase
+      .functions()
+      .httpsCallable('sendTranscripts');
+    try {
+      sendTranscripts(emailContent).then((result) => {
+        console.log(result);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const endConversation = () => {
