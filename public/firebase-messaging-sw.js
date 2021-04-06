@@ -3,8 +3,10 @@ importScripts('https://www.gstatic.com/firebasejs/8.3.1/firebase-messaging.js');
 // import firebase from 'firebase/app';
 // import 'firebase/messaging';
 
+const apiKey = process.env.REACT_APP_FIREBASE_API_KEY;
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyCXmXmYW_VQ3OzYoD1oIekCRqz2Ts1YbdY',
+  apiKey: apiKey,
   authDomain: 'delightful-dog-cloud-functions.firebaseapp.com',
   projectId: 'delightful-dog-cloud-functions',
   storageBucket: 'delightful-dog-cloud-functions.appspot.com',
