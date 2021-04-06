@@ -4,8 +4,10 @@ import 'firebase/firestore';
 import 'firebase/messaging';
 import 'firebase/firebase-functions';
 
+const apiKey = process.env.REACT_APP_FIREBASE_API_KEY;
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyCXmXmYW_VQ3OzYoD1oIekCRqz2Ts1YbdY',
+  apiKey: apiKey,
   authDomain: 'delightful-dog-cloud-functions.firebaseapp.com',
   projectId: 'delightful-dog-cloud-functions',
   storageBucket: 'delightful-dog-cloud-functions.appspot.com',
