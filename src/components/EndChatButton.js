@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Toast } from 'react-bootstrap';
 import firebase, { helpChatsCollection } from '../firestore/index';
 
 export default function EndChatButton({ str, chatObj }) {
