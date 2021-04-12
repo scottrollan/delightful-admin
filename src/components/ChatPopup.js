@@ -10,10 +10,12 @@ export default function ChatPopup({ str, chat }) {
   const [show, setShow] = useState(true);
   const [chatObj, setChatObj] = useState({});
   const [conversation, setConversation] = useState([]);
-
+  const [startTime, setStartTime] = useState('');
   const closeChat = () => {
     setShow(!setShow);
   };
+
+  // let startTime, endTime;
 
   useEffect(() => {
     if ($(`#toastBodyContent${str}`).length > 0) {
@@ -31,6 +33,10 @@ export default function ChatPopup({ str, chat }) {
     setChatObj({ ...chat });
     const q = chat.conversation;
     setConversation([...q]);
+    const qStart = q[0].timestamp;
+    const qStartTime = qStart.toDate();
+    const localTime = qStartTime.toString();
+    setStartTime(localTime);
   }, [chat]);
 
   return (
@@ -41,6 +47,8 @@ export default function ChatPopup({ str, chat }) {
           <small>{chatObj.userEmail}</small>
         </Toast.Header>
         <Toast.Body id={`toastBody${str}`} className={styles.toastBody}>
+          <div style={{ color: 'black' }}>Chat initiated: {startTime}</div>
+
           <div id={`toastBodyContent${str}`}>
             {conversation.map((c) => {
               return (

@@ -8,17 +8,17 @@ export default function EndChatButton({ str, chatObj }) {
   const sendEmail = async () => {
     const user = chatObj.userName;
     const userEmail = chatObj.userEmail;
-    let conversation = [];
+    let conversation = '';
     const convArray = chatObj.conversation;
     const chatStartTime = convArray[0].timestamp;
     const convLength = convArray.length;
     const chatEndTime = convArray[convLength - 1].timestamp;
-    const header = `Chat initiated: ${chatStartTime.toDate()}by: ${user} with a provided email of: ${userEmail}Chat ended: ${chatEndTime.toDate()}`;
+    const header = `<h3>Chat with ${user}</h3><h4>initiated: ${chatStartTime.toDate()}</h4><h4>with a provided email of: ${userEmail}</h4><h4>Chat ended: ${chatEndTime.toDate()}</h4>`;
     convArray.forEach((c) => {
       if (c.fromUser) {
-        conversation = [...conversation, `${user} said: ${c.quote}`];
+        conversation = conversation.concat(`<p>${user} said: ${c.quote}</p>`);
       } else {
-        conversation = [...conversation, `DD said: ${c.quote}`];
+        conversation = conversation.concat(`<p>DD said: ${c.quote}</p>`);
       }
     });
     const emailContent = `${header}${conversation}`;
@@ -26,13 +26,12 @@ export default function EndChatButton({ str, chatObj }) {
     const sendTranscripts = firebase
       .functions()
       .httpsCallable('sendTranscripts');
-    try {
-      sendTranscripts(emailContent).then((result) => {
-        console.log(result);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    const info = await sendTranscripts(emailContent);
+    console.log(info);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const endConversation = () => {

@@ -12,7 +12,7 @@
 /build
 
 # misc
-/public/.env
+/public/apikey.js
 .env
 .DS_Store
 .env.local
