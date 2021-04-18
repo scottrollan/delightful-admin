@@ -1,6 +1,5 @@
 importScripts('https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.3.1/firebase-messaging.js');
-importScripts('./fb.json');
 
 // const apiKey = process.env.PUBLIC_URL.REACT_APP_FIREBASE_API_KEY;
 
