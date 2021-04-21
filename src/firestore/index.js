@@ -50,7 +50,7 @@ messaging
   })
   .then((token) => {
     messagingToken = token;
-    console.log(token);
+    console.log(messagingToken);
   })
   .catch((error) => {
     console.log(`Error Occurred: ${error}`);
@@ -60,6 +60,7 @@ messaging.onMessage((payload) => {
   // payload = { from, priority, notification, collapse_key };
   // payload.notification = { title, body, icon };
   messagePayload = { ...payload.notification };
+  // alert(messagePayload.title);
 });
 
 export { messagingToken, messagePayload };

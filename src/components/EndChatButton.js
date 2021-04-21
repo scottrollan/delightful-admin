@@ -26,12 +26,12 @@ export default function EndChatButton({ str, chatObj }) {
     const sendTranscripts = firebase
       .functions()
       .httpsCallable('sendTranscripts');
-    // try {
-    const info = await sendTranscripts(emailContent);
-    console.log(info);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const info = await sendTranscripts(emailContent);
+      console.log(info.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const endConversation = () => {
@@ -57,12 +57,14 @@ export default function EndChatButton({ str, chatObj }) {
         <Modal.Body>
           <div style={styles.buttonDiv}>
             <Button
+              id="transcriptButton"
               variant="outline-info"
               style={styles.button}
               onClick={() => sendEmail()}
             >
               Email Chat Transcript to Delightful Dog
             </Button>
+
             <Button
               variant="outline-danger"
               style={styles.button}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ChatPopup from './components/ChatPopup';
 import { helpChatsCollection } from './firestore/index';
+import { newHelpChat } from './firestore/NewHelpChat';
 import logo from './dogOnly.png';
 import { createRandomString } from './functions/CreateRandomString';
 import './App.scss';
@@ -16,6 +17,11 @@ const App = () => {
     helpChatsCollection
       .where('closed', '==', false)
       .onSnapshot((querySnapshot) => {
+        querySnapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            newHelpChat(change.doc.data());
+          }
+        });
         allOpenChats = [];
         querySnapshot.forEach((doc) => {
           const data = { ...doc.data(), id: doc.id };
@@ -32,6 +38,7 @@ const App = () => {
     const unsubscribe = helpChatsCollection.onSnapshot(() => {});
     unsubscribe();
   }, []);
+
   return (
     <div className="App">
       <img src={logo} className="App-logo" alt="logo" />
