@@ -31,8 +31,10 @@
 .toastBody {
   display: flex;
   flex-direction: column;
+  height: auto;
   max-height: var(--body-height);
   overflow-y: scroll;
+  margin-bottom: 5px;
 }
 .userIcon {
   @include iconStyles;

@@ -4,21 +4,37 @@ import { helpChatsCollection } from './firestore/index';
 import { newHelpChat } from './firestore/NewHelpChat';
 import logo from './dogOnly.png';
 import { createRandomString } from './functions/CreateRandomString';
+import $ from 'jquery';
 import './App.scss';
 
 const App = () => {
   const [showChat, setShowChat] = useState(true);
   const [openChats, setOpenChats] = useState([]);
   const toggleShow = () => setShowChat(!setShowChat);
+  const audioURL =
+    'https://firebasestorage.googleapis.com/v0/b/delightful-dog-cloud-functions.appspot.com/o/assets%2Fjuntos-607.mp3?alt=media&token=0a779364-5731-44db-b176-dd6b925fe44f';
 
   useEffect(() => {
     const _ = require('lodash');
+    const audio = new Audio(audioURL);
     let allOpenChats = [];
+    const playAudio = () => {
+      const audioEl = document.getElementsByClassName('audio-element')[0];
+      audioEl.play();
+    };
     helpChatsCollection
       .where('closed', '==', false)
       .onSnapshot((querySnapshot) => {
         querySnapshot.docChanges().forEach((change) => {
-          if (change.type === 'added') {
+          let docData = change.doc.data();
+          let timeStamp = docData.conversation[0].timestamp;
+          let messageSent = timeStamp.toDate();
+          console.log(messageSent);
+          if (
+            (change.type === 'added' && new Date() - messageSent < 90000) ||
+            change.type === 'modified'
+          ) {
+            playAudio();
             newHelpChat(change.doc.data());
           }
         });
@@ -41,6 +57,9 @@ const App = () => {
 
   return (
     <div className="App">
+      <audio className="audio-element">
+        <source src={audioURL}></source>
+      </audio>{' '}
       <img src={logo} className="App-logo" alt="logo" />
       <div className="App-title">Delightful Dog Admin Tools</div>
       <div

@@ -5,10 +5,23 @@ import {
   timeStamp,
   fsArrayUnion,
 } from '../firestore/index';
+import $ from 'jquery';
 import '../styles/custom-properties.scss';
 
 export default function ChatForm({ formStr, chatID }) {
   const [newMessage, setNewMessage] = useState('');
+
+  const autoExpandMe = () => {
+    const el = $(`#${formStr}messageInput`);
+    setTimeout(() => {
+      if (el[0].scrollHeight > 24) {
+        el.attr('rows', 2);
+      }
+      if (el[0].scrollHeight > 70) {
+        el.attr('rows', 3);
+      }
+    }, 0);
+  };
 
   const submitNow = (event) => {
     event.preventDefault();
@@ -44,6 +57,7 @@ export default function ChatForm({ formStr, chatID }) {
             placeholder="Enter your message"
             required
             onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={() => autoExpandMe()}
             style={styles.messageInput}
           ></Form.Control>
         </Form.Group>
@@ -71,20 +85,24 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     padding: '0.4vmin 0 0.4vmin 1vmin',
+    borderRadius: '0 0 0.25rem 0.25rem',
   },
   textareaContainer: {
     flexGrow: 1,
     margin: '0 1rem 0 0',
     display: 'flex',
     alignItems: 'center',
+    borderRadius: '0 0 0.25rem 0.25rem',
   },
   messageInput: {
     flex: 1,
     border: 'none',
     padding: '0',
     boxShadow: 'none',
-    resize: 'none',
     backgroundColor: 'transparent',
+    marginBottom: 0,
+    borderRadius: '0 0 0.25rem 0.25rem',
+    resize: 'none',
   },
   flexEndButton: {
     border: 'none',

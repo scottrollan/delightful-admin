@@ -32,7 +32,7 @@ exports.sendTranscripts = functions.https.onCall((data, context) => {
     if (error) {
       console.log(error);
     } else {
-      return info;
+      return { ...info };
     }
   });
 });

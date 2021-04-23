@@ -3,6 +3,7 @@ import { messagingToken, messagePayload } from './index';
 // import $ from 'jquery';
 
 const url = 'https://fcm.googleapis.com/fcm/send';
+const audioURL = '';
 
 const iconURL =
   'https://firebasestorage.googleapis.com/v0/b/delightful-dog-cloud-functions.appspot.com/o/assets%2FdogHeadset.jpg?alt=media&token=b3020357-c63e-4257-80ee-2a30502189b6';
@@ -39,4 +40,5 @@ export const newHelpChat = async (messageDetails) => {
     .catch((error) => {
       console.log(error);
     });
+  // setTimeout();
 };
