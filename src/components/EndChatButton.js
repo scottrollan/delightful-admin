@@ -49,7 +49,7 @@ export default function EndChatButton({ str, chatObj }) {
   };
 
   return (
-    <>
+    <div style={{ margin: '3vmin 0 calc(9vmin + 71px)' }}>
       <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header
           closeButton
@@ -88,13 +88,10 @@ export default function EndChatButton({ str, chatObj }) {
         variant="outline-info"
         onClick={() => endConversation()}
         id={`bottomOfChat${str}`}
-        style={{
-          margin: '3vmin 0',
-        }}
       >
         End This Conversation
       </Button>
-    </>
+    </div>
   );
 }
 

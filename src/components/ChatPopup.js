@@ -37,11 +37,17 @@ export default function ChatPopup({ str, chat }) {
     const qStartTime = qStart.toDate();
     const localTime = qStartTime.toString();
     setStartTime(localTime);
+    console.log(`This is what ChatPopup thinks its id is: toast${str}`);
   }, [chat]);
 
   return (
     <>
-      <Toast show={show} onClose={closeChat} className={styles.toast}>
+      <Toast
+        show={show}
+        onClose={closeChat}
+        className={styles.toast}
+        id={`toast${str}`}
+      >
         <Toast.Header className={styles.toastHeader}>
           <strong>{chatObj.userName}</strong>
           <small>{chatObj.userEmail}</small>
@@ -83,7 +89,7 @@ export default function ChatPopup({ str, chat }) {
             </div>
           </div>
         </Toast.Body>
-        <ChatForm formStr={`form${str}`} chatID={chat.id} />
+        <ChatForm str={str} chatID={chat.id} />
       </Toast>
     </>
   );

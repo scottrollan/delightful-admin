@@ -2,26 +2,31 @@
 
 :root {
   --top-bottom-space: 5vmin;
-  --body-height: 40vh;
+  --body-height: 70vh;
+  --toast-margin: 5vmin;
 }
 
 @mixin iconStyles {
   border-radius: 50%;
   min-width: 5vmin;
-  min-height: 5vmin;
+  height: 5vmin;
+  min-height: 6vmin;
   max-width: 5vmin;
   max-height: 5vmin;
   display: flex;
   justify-content: center;
   align-items: center;
   @media screen and (max-width: 768px) {
-    // display: none;
   }
 }
 
 .toast {
   position: relative;
-  margin: 2vmin;
+  margin: var(--toast-margin);
+  height: auto;
+  @media screen and (max-width: 768px) {
+    margin: 5vmin 5vmin 25vh 5vmin;
+  }
 }
 .toastHeader {
   display: flex;
@@ -63,4 +68,7 @@
   padding: 0.25rem 0.375rem;
   border-radius: 0.85rem 0 0.85rem 0.85rem;
   margin: 0.95rem 0.25rem 0.5rem;
+}
+.spacer {
+  line-height: 115%;
 }

@@ -8,18 +8,26 @@ import {
 import $ from 'jquery';
 import '../styles/custom-properties.scss';
 
-export default function ChatForm({ formStr, chatID }) {
+export default function ChatForm({ str, chatID }) {
   const [newMessage, setNewMessage] = useState('');
 
+  const textArea = $(`#form${str}messageInput`);
+  const spacer = $(`#bottomOfChat${str}`);
+
   const autoExpandMe = () => {
-    const el = $(`#${formStr}messageInput`);
     setTimeout(() => {
-      if (el[0].scrollHeight > 24) {
-        el.attr('rows', 2);
+      if (textArea[0].scrollHeight > 24) {
+        textArea.attr('rows', 2);
+        spacer.attr('margin-bottom', 'calc(3vmin + 25px)');
       }
-      if (el[0].scrollHeight > 70) {
-        el.attr('rows', 3);
+      if (textArea[0].scrollHeight > 70) {
+        textArea.attr('rows', 3);
+        spacer.attr('margin-bottom', 'calc(3vmin + 71px)');
       }
+      // if (textArea[0].scrollHeight < 24) {
+      //   textArea.attr('rows', 1);
+      //   spacer.attr('height', '3px');
+      // }
     }, 0);
   };
 
@@ -39,14 +47,15 @@ export default function ChatForm({ formStr, chatID }) {
       console.log(error);
     } finally {
       setNewMessage('');
+      textArea.attr('rows', 1);
     }
   };
 
   return (
-    <Form id={formStr} style={styles.form} onSubmit={(e) => submitNow(e)}>
+    <Form id={`form${str}`} style={styles.form} onSubmit={(e) => submitNow(e)}>
       <div style={styles.inputArea}>
         <Form.Group
-          controlId={`${formStr}messageInput`}
+          controlId={`form${str}messageInput`}
           style={styles.textareaContainer}
         >
           <Form.Label srOnly="Enter your message here"></Form.Label>
@@ -71,9 +80,9 @@ export default function ChatForm({ formStr, chatID }) {
 
 const styles = {
   form: {
-    height: 'var(--top-bottom-space)',
+    // height: 'var(--top-bottom-space)',
     position: 'absolute',
-    bottom: '5px',
+    bottom: '0',
     left: '0',
     right: '0',
     width: '100%',

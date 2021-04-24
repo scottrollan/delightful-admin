@@ -29,7 +29,6 @@ const App = () => {
           let docData = change.doc.data();
           let timeStamp = docData.conversation[0].timestamp;
           let messageSent = timeStamp.toDate();
-          console.log(messageSent);
           if (
             (change.type === 'added' && new Date() - messageSent < 90000) ||
             change.type === 'modified'
